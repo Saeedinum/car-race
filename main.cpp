@@ -111,6 +111,141 @@ void startGame() {
     glVertex2f(52, roadDivBtm + 20);
     glVertex2f(52, roadDivBtm);
     glEnd();
+
+    //MAIN car
+        //Front Tire
+    glColor3f(0.000, 0.000, 0.000);
+    glBegin(GL_POLYGON);
+    glVertex2f(lrIndex+26-2,5);
+    glVertex2f(lrIndex+26-2,7);
+    glVertex2f(lrIndex+30+2,7);
+    glVertex2f(lrIndex+30+2,5);
+    glEnd();
+        //Back Tire
+    glColor3f(0.000, 0.000, 0.000);
+    glBegin(GL_POLYGON);
+    glVertex2f(lrIndex+26-2,1);
+    glVertex2f(lrIndex+26-2,3);
+    glVertex2f(lrIndex+30+2,3);
+    glVertex2f(lrIndex+30+2,1);
+    glEnd();
+        //Car Body
+    glColor3f(0.678, 1.000, 0.184);
+    glBegin(GL_POLYGON);
+    glVertex2f(lrIndex+26,1);
+    glVertex2f(lrIndex+26,8);
+    glColor3f(0.000, 0.545, 0.545);
+
+    glVertex2f(lrIndex+28,10);
+    glVertex2f(lrIndex+30,8);
+    glVertex2f(lrIndex+30,1);
+    glEnd();
+
+
+    //Opposite car 1
+    glColor3f(0.000, 0.000, 0.000);
+    glBegin(GL_POLYGON);
+    glVertex2f(lrIndex1+26-2,car1+100-4);
+    glVertex2f(lrIndex1+26-2,car1+100-6);
+    glVertex2f(lrIndex1+30+2,car1+100-6);
+    glVertex2f(lrIndex1+30+2,car1+100-4);
+    glEnd();
+    glColor3f(0.000, 0.000, 0.000);
+    glBegin(GL_POLYGON);
+    glVertex2f(lrIndex1+26-2,car1+100);
+    glVertex2f(lrIndex1+26-2,car1+100-2);
+    glVertex2f(lrIndex1+30+2,car1+100-2);
+    glVertex2f(lrIndex1+30+2,car1+100);
+    glEnd();
+    glColor3f(1.000, 0.000, 0.000);
+    glBegin(GL_POLYGON);
+    glVertex2f(lrIndex1+26,car1+100);
+    glVertex2f(lrIndex1+26,car1+100-7);
+    glVertex2f(lrIndex1+28,car1+100-9);
+    glVertex2f(lrIndex1+30,car1+100-7);
+    glVertex2f(lrIndex1+30,car1+100);
+    glEnd();
+    car1--;
+    if(car1<-100){
+        car1=0;
+        lrIndex1=lrIndex;
+    }
+    //KIll check car1
+    if((abs(lrIndex-lrIndex1)<8) && (car1+100<10)){
+            start = 0;
+            gv=1;
+
+    }
+
+    //Opposite car 2
+    glColor3f(0.000, 0.000, 0.000);
+    glBegin(GL_POLYGON);
+    glVertex2f(lrIndex2+26-2,car2+100-4);
+    glVertex2f(lrIndex2+26-2,car2+100-6);
+    glVertex2f(lrIndex2+30+2,car2+100-6);
+    glVertex2f(lrIndex2+30+2,car2+100-4);
+    glEnd();
+    glColor3f(0.000, 0.000, 0.000);
+    glBegin(GL_POLYGON);
+    glVertex2f(lrIndex2+26-2,car2+100);
+    glVertex2f(lrIndex2+26-2,car2+100-2);
+    glVertex2f(lrIndex2+30+2,car2+100-2);
+    glVertex2f(lrIndex2+30+2,car2+100);
+    glEnd();
+    glColor3f(0.294, 0.000, 0.510);
+    glBegin(GL_POLYGON);
+    glVertex2f(lrIndex2+26,car2+100);
+    glVertex2f(lrIndex2+26,car2+100-7);
+    glVertex2f(lrIndex2+28,car2+100-9);
+    glVertex2f(lrIndex2+30,car2+100-7);
+    glVertex2f(lrIndex2+30,car2+100);
+    glEnd();
+    car2--;
+    if(car2<-100){
+        car2=0;
+        lrIndex2=lrIndex;
+    }
+    //KIll check car2
+    if((abs(lrIndex-lrIndex2)<8) && (car2+100<10)){
+            start = 0;
+            gv=1;
+    }
+
+
+    //Opposite car 3
+    glColor3f(0.000, 0.000, 0.000);
+    glBegin(GL_POLYGON);
+    glVertex2f(lrIndex3+26-2,car3+100-4);
+    glVertex2f(lrIndex3+26-2,car3+100-6);
+    glVertex2f(lrIndex3+30+2,car3+100-6);
+    glVertex2f(lrIndex3+30+2,car3+100-4);
+    glEnd();
+    glColor3f(0.000, 0.000, 0.000);
+    glBegin(GL_POLYGON);
+    glVertex2f(lrIndex3+26-2,car3+100);
+    glVertex2f(lrIndex3+26-2,car3+100-2);
+    glVertex2f(lrIndex3+30+2,car3+100-2);
+    glVertex2f(lrIndex3+30+2,car3+100);
+    glEnd();
+    glColor3f(1.000, 0.271, 0.000);
+    glBegin(GL_POLYGON);
+    glVertex2f(lrIndex3+26,car3+100);
+    glVertex2f(lrIndex3+26,car3+100-7);
+    glVertex2f(lrIndex3+28,car3+100-9);
+    glVertex2f(lrIndex3+30,car3+100-7);
+    glVertex2f(lrIndex3+30,car3+100);
+    glEnd();
+    car3--;
+    if(car3<-100){
+        car3=0;
+        lrIndex3=lrIndex;
+    }
+    //KIll check car3
+    if((abs(lrIndex-lrIndex3)<8) && (car3+100<10)){
+            start = 0;
+            gv=1;
+
+    }
 }
 
 void display() {
