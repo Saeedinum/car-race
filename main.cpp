@@ -13,9 +13,10 @@
 // Game Speed
 int FPS = 50;
 // Game Track
-int start = 1; // Start the game directly
+int start = 0; // Changed to 0 to show home page first
 int gv = 0;
 int level = 0;
+int home = 1; // Added home page flag
 
 // Track Score
 int score = 0;
@@ -49,6 +50,92 @@ void renderBitmapString(float x, float y, void *font, const char *string)
     {
         glutBitmapCharacter(font, *c);
     }
+}
+
+// Added function to display home page with car shape
+void homePage()
+{
+    // Green background already set in display function
+
+    // Title
+    glColor3f(1.0, 1.0, 0.0); // Yellow color
+    glPushMatrix();
+    glTranslatef(30, 80, 0.0);
+    glScalef(1.5, 1.5, 1.0);
+    renderBitmapString(0, 0, (void *)font1, "RACING CAR GAME");
+    glPopMatrix();
+
+
+// Draw centered car
+    // Front Tire
+    glColor3f(0.0, 0.0, 0.0);
+    glBegin(GL_POLYGON);
+    glVertex2f(46, 45);
+    glVertex2f(46, 47);
+    glVertex2f(54, 47);
+    glVertex2f(54, 45);
+    glEnd();
+
+    // Back Tire
+    glColor3f(0.0, 0.0, 0.0);
+    glBegin(GL_POLYGON);
+    glVertex2f(46, 41);
+    glVertex2f(46, 43);
+    glVertex2f(54, 43);
+    glVertex2f(54, 41);
+    glEnd();
+
+    // Car Body
+    glColor3f(0.678, 1.000, 0.184);
+    glBegin(GL_POLYGON);
+    glVertex2f(48, 41);
+    glVertex2f(48, 48);
+    glColor3f(0.000, 0.545, 0.545);
+    glVertex2f(50, 50);
+    glVertex2f(52, 48);
+    glVertex2f(52, 41);
+    glEnd();
+
+    // Start Button with 3D effect (similar to retry button style)
+    // Button shadow
+    glColor3f(0.0, 0.3, 0.0);
+    glBegin(GL_POLYGON);
+    glVertex2f(37.5, 24.5);
+    glVertex2f(62.5, 24.5);
+    glVertex2f(62.5, 28.5);
+    glVertex2f(37.5, 28.5);
+    glEnd();
+
+    // Main button
+    glColor3f(0.0, 1.0, 0.0);
+    glBegin(GL_POLYGON);
+    glVertex2f(38, 25);
+    glVertex2f(62, 25);
+    glVertex2f(62, 29);
+    glVertex2f(38, 29);
+    glEnd();
+
+    // Button highlight
+    glColor3f(0.5, 1.0, 0.5);
+    glBegin(GL_POLYGON);
+    glVertex2f(38, 29);
+    glVertex2f(39, 28);
+    glVertex2f(61, 28);
+    glVertex2f(62, 29);
+    glEnd();
+
+    // Start text with shadow for better readability
+    glColor3f(0.0, 0.0, 0.0);
+    renderBitmapString(43.2, 26, (void *)font1, "START");
+    glColor3f(1.0, 1.0, 1.0);
+    renderBitmapString(43, 26.2, (void *)font1, "START");
+
+    // Instructions
+    glColor3f(1.0, 1.0, 1.0);
+    renderBitmapString(30, 15, (void *)font3, "Use Arrow Keys to Control the Car");
+    renderBitmapString(30, 12, (void *)font3, "UP/DOWN: Adjust Speed");
+    renderBitmapString(30, 9, (void *)font3, "LEFT/RIGHT: Move Car");
+    renderBitmapString(30, 6, (void *)font3, "ESC: Exit Game");
 }
 
 void startGame()
@@ -411,16 +498,26 @@ void startGame()
         glColor3f(1.0, 1.0, 1.0);
         renderBitmapString(44, 33.2, (void *)font1, "Exit");
     }
-
 }
 
-//define the mouseClick function
+// Modified mouseClick function to handle home page button
 void mouseClick(int button, int state, int x, int y) {
-    if (gv == 1 && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
-        float worldX = x * 100.0 / glutGet(GLUT_WINDOW_WIDTH);
-        float worldY = (windowHeight - y) * 100.0 / windowHeight;
+    int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+    float worldX = x * 100.0 / glutGet(GLUT_WINDOW_WIDTH);
+    float worldY = (windowHeight - y) * 100.0 / windowHeight;
 
+    // Handle home page start button
+    if (home == 1 && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        // Start button bounds (38 to 62 x, 25 to 29 y)
+        if (worldX >= 38 && worldX <= 62 && worldY >= 25 && worldY <= 29) {
+            // Start the game
+            home = 0;
+            start = 1;
+        }
+    }
+
+    // Handle game over screen buttons
+    if (gv == 1 && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         // Retry button bounds (38 to 58 x, 38 to 42 y)
         if (worldX >= 38 && worldX <= 58 && worldY >= 38 && worldY <= 42) {
             // Reset game
@@ -446,48 +543,58 @@ void mouseClick(int button, int state, int x, int y) {
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(0.000, 0.392, 0.000, 1); // Background color from startGame
-    startGame();
+    glClearColor(0.000, 0.392, 0.000, 1); // Background color
+
+    // Display appropriate screen based on game state
+    if (home) {
+        homePage();
+    } else {
+        startGame();
+    }
+
     glFlush();
     glutSwapBuffers();
 }
 
 void spe_key(int key, int x, int y)
 {
-    switch (key)
-    {
-    case GLUT_KEY_DOWN:
-        if (FPS > (50 + (level * 2)))
-            FPS = FPS - 2;
-        break;
-    case GLUT_KEY_UP:
-        FPS = FPS + 2;
-        break;
-
-    case GLUT_KEY_LEFT:
-        if (lrIndex >= 0)
+    // Only process key inputs when game is active
+    if (start && !home) {
+        switch (key)
         {
-            lrIndex = lrIndex - (FPS / 10);
-            if (lrIndex < 0)
-            {
-                lrIndex = -1;
-            }
-        }
-        break;
+        case GLUT_KEY_DOWN:
+            if (FPS > (50 + (level * 2)))
+                FPS = FPS - 2;
+            break;
+        case GLUT_KEY_UP:
+            FPS = FPS + 2;
+            break;
 
-    case GLUT_KEY_RIGHT:
-        if (lrIndex <= 44)
-        {
-            lrIndex = lrIndex + (FPS / 10);
-            if (lrIndex > 44)
+        case GLUT_KEY_LEFT:
+            if (lrIndex >= 0)
             {
-                lrIndex = 45;
+                lrIndex = lrIndex - (FPS / 10);
+                if (lrIndex < 0)
+                {
+                    lrIndex = -1;
+                }
             }
-        }
-        break;
+            break;
 
-    default:
-        break;
+        case GLUT_KEY_RIGHT:
+            if (lrIndex <= 44)
+            {
+                lrIndex = lrIndex + (FPS / 10);
+                if (lrIndex > 44)
+                {
+                    lrIndex = 45;
+                }
+            }
+            break;
+
+        default:
+            break;
+        }
     }
 }
 
