@@ -314,13 +314,132 @@ void startGame()
     glEnd();
 
     // Display Game Over message if game is over
-    if (gv == 1)
-    {
-        glColor3f(1.000, 0.000, 0.000);
-        renderBitmapString(35, 60, (void *)font1, "GAME OVER");
+    if (gv == 1) {
+        // Background shadow for "GAME OVER" text (for 3D effect)
+        glColor3f(0.5, 0.0, 0.0);
+        glPushMatrix();
+        glTranslatef(35.3, 59.7, 0.0);
+        glScalef(1.2, 1.2, 1.0);
+        renderBitmapString(0, 0, (void *)font1, "GAME OVER");
+        glPopMatrix();
+
+        // Main "GAME OVER" text
+        glColor3f(1.0, 0.0, 0.0);
+        glPushMatrix();
+        glTranslatef(35, 60, 0.0);
+        glScalef(1.2, 1.2, 1.0);
+        renderBitmapString(0, 0, (void *)font1, "GAME OVER");
+        glPopMatrix();
+
+        // Score text with glow effect
         char buffer2[50];
         sprintf(buffer2, "Your Score is : %d", score);
+
+        // Score text shadow
+        glColor3f(0.0, 0.3, 0.0);
+        renderBitmapString(33.2, 55.8, (void *)font1, buffer2);
+
+        // Main score text
+        glColor3f(0.0, 1.0, 0.0);
         renderBitmapString(33, 56, (void *)font1, buffer2);
+
+        // Retry Button with 3D effect
+        // Button shadow
+        glColor3f(0.0, 0.3, 0.0);
+        glBegin(GL_POLYGON);
+        glVertex2f(37.5, 37.5);
+        glVertex2f(58.5, 37.5);
+        glVertex2f(58.5, 41.5);
+        glVertex2f(37.5, 41.5);
+        glEnd();
+
+        // Main button
+        glColor3f(0.0, 1.0, 0.0);
+        glBegin(GL_POLYGON);
+        glVertex2f(38, 38);
+        glVertex2f(58, 38);
+        glVertex2f(58, 42);
+        glVertex2f(38, 42);
+        glEnd();
+
+        // Button highlight
+        glColor3f(0.5, 1.0, 0.5);
+        glBegin(GL_POLYGON);
+        glVertex2f(38, 42);
+        glVertex2f(39, 41);
+        glVertex2f(57, 41);
+        glVertex2f(58, 42);
+        glEnd();
+
+        // Retry text with shadow for better readability
+        glColor3f(0.0, 0.0, 0.0);
+        renderBitmapString(43.2, 39, (void *)font1, "Retry");
+        glColor3f(1.0, 1.0, 1.0);
+        renderBitmapString(43, 39.2, (void *)font1, "Retry");
+
+        // Exit Button with 3D effect
+        // Button shadow
+        glColor3f(0.5, 0.0, 0.0);
+        glBegin(GL_POLYGON);
+        glVertex2f(37.5, 31.5);
+        glVertex2f(58.5, 31.5);
+        glVertex2f(58.5, 35.5);
+        glVertex2f(37.5, 35.5);
+        glEnd();
+
+        // Main button
+        glColor3f(1.0, 0.0, 0.0);
+        glBegin(GL_POLYGON);
+        glVertex2f(38, 32);
+        glVertex2f(58, 32);
+        glVertex2f(58, 36);
+        glVertex2f(38, 36);
+        glEnd();
+
+        // Button highlight
+        glColor3f(1.0, 0.5, 0.5);
+        glBegin(GL_POLYGON);
+        glVertex2f(38, 36);
+        glVertex2f(39, 35);
+        glVertex2f(57, 35);
+        glVertex2f(58, 36);
+        glEnd();
+
+        // Exit text with shadow for better readability
+        glColor3f(0.0, 0.0, 0.0);
+        renderBitmapString(44.2, 33, (void *)font1, "Exit");
+        glColor3f(1.0, 1.0, 1.0);
+        renderBitmapString(44, 33.2, (void *)font1, "Exit");
+    }
+
+}
+
+//define the mouseClick function
+void mouseClick(int button, int state, int x, int y) {
+    if (gv == 1 && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+        float worldX = x * 100.0 / glutGet(GLUT_WINDOW_WIDTH);
+        float worldY = (windowHeight - y) * 100.0 / windowHeight;
+
+        // Retry button bounds (38 to 58 x, 38 to 42 y)
+        if (worldX >= 38 && worldX <= 58 && worldY >= 38 && worldY <= 42) {
+            // Reset game
+            score = 0;
+            level = 0;
+            FPS = 50;
+            start = 1;
+            gv = 0;
+            car1 = 0;
+            car2 = 35;
+            car3 = 70;
+            roadDivTop = roadDivMdl = roadDivBtm = 0;
+            lrIndex = lrIndex1 = lrIndex2 = lrIndex3 = 0;
+        }
+
+        // Exit button bounds (38 to 58 x, 32 to 36 y)
+        if (worldX >= 38 && worldX <= 58 && worldY >= 32 && worldY <= 36) {
+            exit(0);
+        }
     }
 }
 
@@ -401,6 +520,7 @@ int main(int argc, char *argv[])
     glutDisplayFunc(display);
     glutSpecialFunc(spe_key);
     glutKeyboardFunc(keyHandler);
+    glutMouseFunc(mouseClick);
 
     glOrtho(0, 100, 0, 100, -1, 1);
     glClearColor(0.184, 0.310, 0.310, 1);
